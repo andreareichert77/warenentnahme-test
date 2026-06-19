@@ -139,7 +139,7 @@ const CONFIG = {
       <div class="card-title">1 · Anforderungsdetails</div>
       <div class="form-row">
         <div class="form-group" style="flex:2">
-          <label>Mitarbeiter (Kreditor)</label>
+          <label>Mitarbeiter</label>
           <div id="vendorSearchWrapper" style="position:relative">
             <input id="vendorSearchInput" type="text" placeholder="Name oder Nummer eingeben…"
                    oninput="onVendorSearch()" onkeydown="onVendorSearchKey(event)" autocomplete="off" />
@@ -440,7 +440,7 @@ function renderBasket() {
   const el  = document.getElementById('basketContainer');
   const btn = document.getElementById('btnSubmit');
   const cnt = document.getElementById('basketCount');
-  cnt.textContent = basket.length ? `(${basket.length} line${basket.length > 1 ? 's' : ''})` : '';
+  cnt.textContent = basket.length ? `(${basket.length} ${basket.length > 1 ? 'Positionen' : 'Position'})` : '';
 
   if (basket.length === 0) {
     el.innerHTML = '<p class="empty-basket">Noch keine Artikel hinzugefügt.</p>';
@@ -457,7 +457,7 @@ function renderBasket() {
           <th>Artikelnr.</th>
           <th>Beschreibung</th>
           <th>Menge</th>
-          <th>ME</th>
+          <th>Einheit</th>
           <th>Lagerort</th>
           <th></th>
         </tr>
@@ -608,6 +608,7 @@ async function loadMyRequests() {
     }
 
     const statusColor = { Open: '#0f6cbd', Approved: '#107c10', 'In Progress': '#986f0b', Posted: '#107c10', Rejected: '#d83b01' };
+    const statusLabel = { Open: 'Offen', Approved: 'Genehmigt', 'In Progress': 'In Bearbeitung', Posted: 'Gebucht', Rejected: 'Abgelehnt' };
 
     el.innerHTML = `
       <table class="basket-table">
@@ -620,7 +621,7 @@ async function loadMyRequests() {
               <td><strong>${esc(r.no)}</strong></td>
               <td>${r.requestDate ? r.requestDate.substring(0,10) : '–'}</td>
               <td>${esc(r.employeeName || r.employeeNo)}</td>
-              <td><span style="color:${statusColor[r.status] || '#333'};font-weight:600">${esc(r.status)}</span></td>
+              <td><span style="color:${statusColor[r.status] || '#333'};font-weight:600">${esc(statusLabel[r.status] || r.status)}</span></td>
               <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r.remark || '')}</td>
               <td>${esc(r.processedBy || '–')}</td>
             </tr>
